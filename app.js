@@ -50,13 +50,14 @@ newdate = day + " " + month + " " + year;
     Task: { type: String},
     date:{type: Date,default: Date.now },
     c_date:{type: Date,default: Date.now },
-    status:{type:Number }
+    status:{type:Number,default:'0' }
      
   });
 
   const task_model = mongoose.model('task_tbl', Comment);
 
   app.post('/task',function(req,res){
+console.log(req.body);
 
     task_model.create(req.body);
 
