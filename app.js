@@ -10,7 +10,22 @@ app.set('view engine','ejs');
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: false }))
 
-app.get('/',function(req,res){
+
+  /* schema and model */
+
+  const Comment = new mongoose.Schema({
+    Task: { type: String},
+    date:{type: Date,default: Date.now },
+    c_date:{type: Date,default: Date.now },
+    status:{type:Number,default:'0' }
+     
+  });
+
+  const task_model = mongoose.model('task_tbl', Comment);
+
+app.get('/',async function(req,res){
+
+  var select_Task = await task_model.find();
 
     var datestring = new Date().toISOString();
 
@@ -24,7 +39,7 @@ var day = dateObj.getUTCDate();
 var year = dateObj.getUTCFullYear();
 newdate = day + " " + month + " " + year;
 
-    res.render('index',{dayName,newdate});
+    res.render('index',{dayName,newdate,select_Task});
   })
 
   app.get('/task',function(req,res){
@@ -44,17 +59,6 @@ newdate = day + " " + month + " " + year;
     res.render('task',{dayName,newdate});
   })
 
-  /* schema and model */
-
-  const Comment = new mongoose.Schema({
-    Task: { type: String},
-    date:{type: Date,default: Date.now },
-    c_date:{type: Date,default: Date.now },
-    status:{type:Number,default:'0' }
-     
-  });
-
-  const task_model = mongoose.model('task_tbl', Comment);
 
   app.post('/task',function(req,res){
 console.log(req.body);
